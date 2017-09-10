@@ -9,6 +9,8 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
+    var ticTacToeGame = TicTacToeGame()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
