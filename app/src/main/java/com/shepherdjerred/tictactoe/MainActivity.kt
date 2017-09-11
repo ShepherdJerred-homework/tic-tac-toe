@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.GridLayout
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -16,29 +17,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
     }
 
-    fun resetBoard(view: View) {
-        val parent = findViewById(R.id.grid)
-        if (parent is ViewGroup) {
-            for (i in 0..9) {
-                val child = parent.getChildAt(i)
-                if (child is Button) {
-                    child.text = ""
-                }
-            }
+    fun syncBoard(view: View) {
+        val viewGrid = findViewById(R.id.grid) as GridLayout
+        for (entry in ticTacToeGame.gameBoard.board.entries) {
+
+            val button = viewGrid.getChildAt(entry.key.x + entry.key.y) as Button
+            button.text = entry.value.name
         }
     }
 
+    fun resetBoard(view: View) {
+        ticTacToeGame.resetBoard()
+    }
+
     fun gameButtonClick(view: View) {
-        if (view is Button) {
-            if (view.text.equals("")) {
-                view.text = "X"
-                if (!haveAllButtonsBeenTaken(view)) {
-                    clickRandomButton(view)
-                }
-            } else {
-                // invalid move
-            }
-        }
+        ticTacToeGame.gameBoard.setBoardSpace()
     }
 
     fun clickRandomButton(view: View) {
@@ -61,20 +54,5 @@ class MainActivity : AppCompatActivity() {
                 }
             } while (!moveDone)
         }
-    }
-
-    fun haveAllButtonsBeenTaken(view: View): Boolean {
-        val parent = view.parent
-        if (parent is ViewGroup) {
-            for (i in 0..9) {
-                val child = parent.getChildAt(i)
-                if (child is Button) {
-                    if (child.text.equals("")) {
-                        return false
-                    }
-                }
-            }
-        }
-        return true
     }
 }

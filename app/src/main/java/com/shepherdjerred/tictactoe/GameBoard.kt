@@ -5,7 +5,7 @@ class GameBoard(rows: Int, columns: Int) {
     private var rows = rows
     private var columns = columns
 
-    private var board: HashMap<Coordinate, Player> = HashMap()
+    val board: HashMap<Coordinate, Player> = HashMap()
 
     fun setBoardSpace(coordinate: Coordinate, player: Player) {
         if (isValidCoordinate(coordinate)) {
