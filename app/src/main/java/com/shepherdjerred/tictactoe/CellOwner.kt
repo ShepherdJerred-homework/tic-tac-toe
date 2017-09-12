@@ -1,6 +1,7 @@
 package com.shepherdjerred.tictactoe
 
-enum class Player {
+enum class CellOwner {
     PLAYER_ONE,
-    PLAYER_TWO
+    PLAYER_TWO,
+    NONE
 }

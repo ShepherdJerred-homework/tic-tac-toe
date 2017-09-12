@@ -23,72 +23,63 @@
 
         <Button
             android:id="@+id/x0y2"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            style="@style/PlayButton"
             android:layout_column="0"
             android:layout_row="0"
             android:onClick="gameButtonClick" />
 
         <Button
             android:id="@+id/x1y2"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            style="@style/PlayButton"
             android:layout_column="1"
             android:layout_row="0"
             android:onClick="gameButtonClick" />
 
         <Button
             android:id="@+id/x2y2"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            style="@style/PlayButton"
             android:layout_column="2"
             android:layout_row="0"
             android:onClick="gameButtonClick" />
 
         <Button
             android:id="@+id/x0y1"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            style="@style/PlayButton"
             android:layout_column="0"
             android:layout_row="1"
             android:onClick="gameButtonClick" />
 
         <Button
             android:id="@+id/x1y1"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            style="@style/PlayButton"
             android:layout_column="1"
             android:layout_row="1"
             android:onClick="gameButtonClick" />
 
         <Button
             android:id="@+id/x2y1"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            style="@style/PlayButton"
             android:layout_column="2"
             android:layout_row="1"
             android:onClick="gameButtonClick" />
 
         <Button
             android:id="@+id/x0y0"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            style="@style/PlayButton"
             android:layout_column="0"
             android:layout_row="2"
             android:onClick="gameButtonClick" />
 
         <Button
             android:id="@+id/x1y0"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            style="@style/PlayButton"
             android:layout_column="1"
             android:layout_row="2"
             android:onClick="gameButtonClick" />
 
         <Button
             android:id="@+id/x2y0"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            style="@style/PlayButton"
             android:layout_column="2"
             android:layout_row="2"
             android:onClick="gameButtonClick" />
@@ -116,8 +107,8 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:onClick="resetBoard"
-        android:text="Reset"
+        android:onClick="resetGame"
+        android:text="@string/reset"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

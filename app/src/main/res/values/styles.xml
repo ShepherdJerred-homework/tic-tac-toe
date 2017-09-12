@@ -8,4 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="PlayButton">
+        <item name="android:width">90dp</item>
+        <item name="android:height">90dp</item>
+        <item name="android:textSize">40sp</item>
+    </style>
+
 </resources>
