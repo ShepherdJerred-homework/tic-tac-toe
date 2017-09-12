@@ -5,11 +5,11 @@ class GameBoard(rows: Int, columns: Int) {
     private var rows = rows
     private var columns = columns
 
-    var board: HashMap<Cell, CellOwner> = HashMap()
+    var board: HashMap<Cell, Player> = HashMap()
 
-    fun setBoardSpace(cell: Cell, cellOwner: CellOwner) {
+    fun setBoardSpace(cell: Cell, player: Player) {
         if (isValidCell(cell)) {
-            board.put(cell, cellOwner)
+            board.put(cell, player)
         } else {
             throw IllegalArgumentException()
         }

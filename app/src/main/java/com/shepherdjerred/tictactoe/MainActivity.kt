@@ -1,6 +1,11 @@
+/*
+Extra credit done for changing button colors and AI delay
+ */
+
 package com.shepherdjerred.tictactoe
 
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -13,6 +18,7 @@ class MainActivity : AppCompatActivity() {
     var ticTacToeGame = TicTacToeGame()
     lateinit var grid: GridLayout
     val buttonCellMap: HashMap<Button, Cell> = HashMap()
+    var currentPlayersTurn: Player = Player.PLAYER_ONE
 
     // Constants
     companion object {
@@ -42,32 +48,36 @@ class MainActivity : AppCompatActivity() {
 
     fun resetGame(view: View) {
         ticTacToeGame.resetGame()
+        currentPlayersTurn = Player.PLAYER_ONE
         syncBoard()
         syncStatus()
     }
 
     fun gameButtonClick(view: View) {
-        if (ticTacToeGame.status == TicTacToeGame.Status.PLAYING) {
+        if (ticTacToeGame.status == TicTacToeGame.Status.PLAYING && currentPlayersTurn == Player.PLAYER_ONE) {
             val button = view as Button
             val cell = buttonCellMap[button]
             if (cell != null) {
                 if (ticTacToeGame.gameBoard.isCellOpen(cell)) {
-                    ticTacToeGame.doMove(cell, CellOwner.PLAYER_ONE)
+                    ticTacToeGame.doMove(cell, Player.PLAYER_ONE)
                     syncBoard()
                     syncStatus()
-                } else {
-                    return
+                    currentPlayersTurn = Player.PLAYER_TWO
+                    doComputerMove()
                 }
             }
         }
-        doComputerMove()
     }
 
     private fun doComputerMove() {
         if (ticTacToeGame.status == TicTacToeGame.Status.PLAYING) {
-            ticTacToeGame.doAutomaticMove(CellOwner.PLAYER_TWO)
-            syncBoard()
-            syncStatus()
+            val handler = Handler()
+            handler.postDelayed({
+                ticTacToeGame.doAutomaticMove(Player.PLAYER_TWO)
+                syncBoard()
+                syncStatus()
+                currentPlayersTurn = Player.PLAYER_ONE
+            }, 1000)
         }
     }
 
@@ -87,22 +97,22 @@ class MainActivity : AppCompatActivity() {
             if (cellOwner != null) {
                 setButtonTextForOwner(button, cellOwner)
             } else {
-                setButtonTextForOwner(button, CellOwner.NONE)
+                setButtonTextForOwner(button, Player.NONE)
             }
         }
     }
 
-    private fun setButtonTextForOwner(button: Button, cellOwner: CellOwner) {
-        val ownerSymbol = when (cellOwner) {
-            CellOwner.PLAYER_ONE -> PLAYER_ONE_SYMBOL
-            CellOwner.PLAYER_TWO -> PLAYER_TWO_SYMBOL
-            CellOwner.NONE -> NONE_SYMBOL
+    private fun setButtonTextForOwner(button: Button, player: Player) {
+        val ownerSymbol = when (player) {
+            Player.PLAYER_ONE -> PLAYER_ONE_SYMBOL
+            Player.PLAYER_TWO -> PLAYER_TWO_SYMBOL
+            Player.NONE -> NONE_SYMBOL
         }
-        when (cellOwner) {
-            CellOwner.PLAYER_ONE -> {
+        when (player) {
+            Player.PLAYER_ONE -> {
                 button.setTextColor(ContextCompat.getColor(button.context, R.color.playerOne))
             }
-            CellOwner.PLAYER_TWO -> {
+            Player.PLAYER_TWO -> {
                 button.setTextColor(ContextCompat.getColor(button.context, R.color.playerTwo))
             }
         }

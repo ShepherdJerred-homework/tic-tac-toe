@@ -14,16 +14,16 @@ class TicTacToeGame {
     }
 
     // https://stackoverflow.com/questions/1056316/algorithm-for-determining-tic-tac-toe-game-over
-    fun checkWinner(cell: Cell, cellOwner: CellOwner) {
+    fun checkWinner(cell: Cell, player: Player) {
         for (row in 0..2) {
-            if (gameBoard.board[Cell(row, cell.y)] != cellOwner) {
+            if (gameBoard.board[Cell(row, cell.y)] != player) {
                 break
             }
             if (row == 2) {
-                if (cellOwner == CellOwner.PLAYER_ONE) {
+                if (player == Player.PLAYER_ONE) {
                     status = Status.PLAYER_ONE_WINNER
                     return
-                } else if (cellOwner == CellOwner.PLAYER_TWO) {
+                } else if (player == Player.PLAYER_TWO) {
                     status = Status.PLAYER_TWO_WINNER
                     return
                 }
@@ -31,14 +31,14 @@ class TicTacToeGame {
         }
 
         for (column in 0..2) {
-            if (gameBoard.board[Cell(cell.x, column)] != cellOwner) {
+            if (gameBoard.board[Cell(cell.x, column)] != player) {
                 break
             }
             if (column == 2) {
-                if (cellOwner == CellOwner.PLAYER_ONE) {
+                if (player == Player.PLAYER_ONE) {
                     status = Status.PLAYER_ONE_WINNER
                     return
-                } else if (cellOwner == CellOwner.PLAYER_TWO) {
+                } else if (player == Player.PLAYER_TWO) {
                     status = Status.PLAYER_TWO_WINNER
                     return
                 }
@@ -47,14 +47,14 @@ class TicTacToeGame {
 
         if (cell.x == cell.y) {
             for (i in 0 until 3) {
-                if (gameBoard.board[Cell(i, i)] != cellOwner) {
+                if (gameBoard.board[Cell(i, i)] != player) {
                     break
                 }
                 if (i == 2) {
-                    if (cellOwner == CellOwner.PLAYER_ONE) {
+                    if (player == Player.PLAYER_ONE) {
                         status = Status.PLAYER_ONE_WINNER
                         return
-                    } else if (cellOwner == CellOwner.PLAYER_TWO) {
+                    } else if (player == Player.PLAYER_TWO) {
                         status = Status.PLAYER_TWO_WINNER
                         return
                     }
@@ -64,14 +64,14 @@ class TicTacToeGame {
 
         if (cell.x + cell.y == 3 - 1) {
             for (i in 0 until 3) {
-                if (gameBoard.board[Cell(i, 2 - i)] != cellOwner) {
+                if (gameBoard.board[Cell(i, 2 - i)] != player) {
                     break
                 }
                 if (i == 2) {
-                    if (cellOwner == CellOwner.PLAYER_ONE) {
+                    if (player == Player.PLAYER_ONE) {
                         status = Status.PLAYER_ONE_WINNER
                         return
-                    } else if (cellOwner == CellOwner.PLAYER_TWO) {
+                    } else if (player == Player.PLAYER_TWO) {
                         status = Status.PLAYER_TWO_WINNER
                         return
                     }
@@ -85,18 +85,18 @@ class TicTacToeGame {
         }
     }
 
-    fun doMove(cell: Cell, cellOwner: CellOwner) {
+    fun doMove(cell: Cell, player: Player) {
         if (gameBoard.isCellOpen(cell)) {
             try {
-                gameBoard.setBoardSpace(cell, cellOwner)
+                gameBoard.setBoardSpace(cell, player)
             } catch (e: IllegalArgumentException) {
                 Log.e(this.javaClass.name, e.message)
             }
         }
-        checkWinner(cell, cellOwner)
+        checkWinner(cell, player)
     }
 
-    fun doAutomaticMove(cellOwner: CellOwner) {
+    fun doAutomaticMove(player: Player) {
         if (gameBoard.anyOpenCells()) {
             var moveDone = false
             do {
@@ -107,7 +107,7 @@ class TicTacToeGame {
                 val randomRow = random.nextInt(max + 1 - min) + min
                 val cell = Cell(randomRow, randomColumn)
                 if (gameBoard.isCellOpen(cell)) {
-                    doMove(cell, cellOwner)
+                    doMove(cell, player)
                     moveDone = true
                 }
             } while (!moveDone)
