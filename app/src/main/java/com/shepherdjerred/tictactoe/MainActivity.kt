@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.GridLayout
@@ -32,6 +33,63 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         grid = findViewById(R.id.grid) as GridLayout
         mapButtonToCells()
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+        if (savedInstanceState != null) {
+            ticTacToeGame.status = TicTacToeGame.Status.valueOf(savedInstanceState.getString("status"))
+            currentPlayersTurn = Player.valueOf(savedInstanceState.getString("currentTurn"))
+            var boardString = savedInstanceState.getString("boardString")
+            parseBoardString(boardString)
+            syncBoard()
+            syncStatus()
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        var boardString = boardToString()
+        outState?.putString("status", ticTacToeGame.status.toString())
+        outState?.putString("boardString", boardString)
+        outState?.putString("currentTurn", currentPlayersTurn.toString())
+    }
+
+    private fun parseBoardString(boardString: String) {
+        Log.i("TICTACTOE", boardString)
+        var charArray = boardString.toCharArray()
+        var x = 0
+        var y = 0
+        for (c in charArray) {
+            var player = when (c) {
+                '1' -> Player.PLAYER_ONE
+                '2' -> Player.PLAYER_TWO
+                else -> Player.NONE
+            }
+            ticTacToeGame.gameBoard.board.put(Cell(x, y), player)
+            if (x > 2) {
+                x = 0
+                y++
+            }
+            x++
+        }
+    }
+
+    private fun boardToString(): String {
+        var boardString = ""
+        for (y in 2 downTo 0) {
+            for (x in 2 downTo 0) {
+                val player = ticTacToeGame.gameBoard.board[Cell(x, y)]
+                var playerChar = when (player) {
+                    Player.PLAYER_ONE -> "1"
+                    Player.PLAYER_TWO -> "2"
+                    else -> "N"
+                }
+                boardString += playerChar
+            }
+        }
+        Log.i("TICTACTOE", boardString)
+        return boardString
     }
 
     private fun mapButtonToCells() {

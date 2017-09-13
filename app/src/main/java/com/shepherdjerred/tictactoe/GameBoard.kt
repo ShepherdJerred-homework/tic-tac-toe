@@ -1,9 +1,6 @@
 package com.shepherdjerred.tictactoe
 
-class GameBoard(rows: Int, columns: Int) {
-
-    private var rows = rows
-    private var columns = columns
+class GameBoard(private val rows: Int, private val columns: Int) {
 
     var board: HashMap<Cell, Player> = HashMap()
 
