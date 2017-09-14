@@ -1,18 +1,21 @@
 /*
 Extra credit done for changing button colors and AI delay
+Extra credit for win/lose sound done
  */
 
 package com.shepherdjerred.tictactoe
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.GridLayout
 import android.widget.TextView
+
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,7 +46,7 @@ class MainActivity : AppCompatActivity() {
             var boardString = savedInstanceState.getString("boardString")
             parseBoardString(boardString)
             syncBoard()
-            syncStatus()
+            syncStatus(null)
         }
     }
 
@@ -56,7 +59,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun parseBoardString(boardString: String) {
-        Log.i("TICTACTOE", boardString)
         var charArray = boardString.toCharArray()
         var x = 0
         var y = 0
@@ -67,18 +69,19 @@ class MainActivity : AppCompatActivity() {
                 else -> Player.NONE
             }
             ticTacToeGame.gameBoard.board.put(Cell(x, y), player)
-            if (x > 2) {
+            if (x == 2) {
                 x = 0
                 y++
+            } else {
+                x++
             }
-            x++
         }
     }
 
     private fun boardToString(): String {
         var boardString = ""
-        for (y in 2 downTo 0) {
-            for (x in 2 downTo 0) {
+        for (y in 0..2) {
+            for (x in 0..2) {
                 val player = ticTacToeGame.gameBoard.board[Cell(x, y)]
                 var playerChar = when (player) {
                     Player.PLAYER_ONE -> "1"
@@ -88,7 +91,6 @@ class MainActivity : AppCompatActivity() {
                 boardString += playerChar
             }
         }
-        Log.i("TICTACTOE", boardString)
         return boardString
     }
 
@@ -108,7 +110,7 @@ class MainActivity : AppCompatActivity() {
         ticTacToeGame.resetGame()
         currentPlayersTurn = Player.PLAYER_ONE
         syncBoard()
-        syncStatus()
+        syncStatus(null)
     }
 
     fun gameButtonClick(view: View) {
@@ -119,32 +121,45 @@ class MainActivity : AppCompatActivity() {
                 if (ticTacToeGame.gameBoard.isCellOpen(cell)) {
                     ticTacToeGame.doMove(cell, Player.PLAYER_ONE)
                     syncBoard()
-                    syncStatus()
+                    syncStatus(view)
                     currentPlayersTurn = Player.PLAYER_TWO
-                    doComputerMove()
+                    doComputerMove(view)
                 }
             }
         }
     }
 
-    private fun doComputerMove() {
+    private fun doComputerMove(view: View) {
         if (ticTacToeGame.status == TicTacToeGame.Status.PLAYING) {
-            val handler = Handler()
-            handler.postDelayed({
+            // https://stackoverflow.com/questions/1520887/how%E2%80%90to%E2%80%90pause%E2%80%90sleep%E2%80%90thread%E2%80%90or%E2%80%90process%E2%80%90in%E2%80%90%20%20android/3039718#3039718
+            Handler().postDelayed({
                 ticTacToeGame.doAutomaticMove(Player.PLAYER_TWO)
                 syncBoard()
-                syncStatus()
+                syncStatus(view)
                 currentPlayersTurn = Player.PLAYER_ONE
             }, 1000)
         }
     }
 
-    private fun syncStatus() {
+    private fun syncStatus(view: View?) {
         val message = when (ticTacToeGame.status) {
             TicTacToeGame.Status.PLAYING -> ""
             TicTacToeGame.Status.NO_WINNER -> getString(R.string.Tie)
             TicTacToeGame.Status.PLAYER_ONE_WINNER -> getString(R.string.PlayerOneWins)
             TicTacToeGame.Status.PLAYER_TWO_WINNER -> getString(R.string.PlayerTwoWins)
+        }
+        // https://stackoverflow.com/questions/10451092/how-to-play-a-sound-effect-in-android
+        if (view != null) {
+            when (ticTacToeGame.status) {
+                TicTacToeGame.Status.PLAYER_ONE_WINNER -> {
+                    val player = MediaPlayer.create(view.context, R.raw.win)
+                    player.start()
+                }
+                TicTacToeGame.Status.PLAYER_TWO_WINNER -> {
+                    val player = MediaPlayer.create(view.context, R.raw.lose)
+                    player.start()
+                }
+            }
         }
         (findViewById(R.id.result) as TextView).text = message
     }
